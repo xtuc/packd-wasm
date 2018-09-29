@@ -1,0 +1,36 @@
+<script charset="utf-8" src="http://localhost:3000/onigasm@2.2.1/lib/onigasm.wasm"></script>
+<script charset="utf-8">
+  const memory = new WebAssembly.Memory({ initial: 2400 });
+  const table = new WebAssembly.Table({ initial: 90, maximum: 90, element:"anyfunc" });
+
+  instantiate({
+    env: {
+      memory,
+      table,
+      tableBase: 0,
+      DYNAMICTOP_PTR: 0,
+      STACKTOP: 0,
+      STACK_MAX: 10,
+      abort: () => console.log("aborted"),
+      _abort: () => console.log("_abort"),
+      abortOnCannotGrowMemory: () => console.log("abortOnCannotGrowMemory"),
+      ___setErrNo: (i) => console.log("___setErrNo", i),
+      ___syscall140: () => console.log("___syscall140"),
+      ___syscall146: () => console.log("___syscall146"),
+      ___syscall6: () => console.log("___syscall6"),
+      enlargeMemory: () => console.log("enlargeMemory"),
+      getTotalMemory: () => 0,
+      _emscripten_memcpy_big: () => 0,
+      _pthread_getspecific: () => 0,
+      _pthread_key_create: () => 0,
+      _pthread_once: () => 0,
+      _pthread_setspecific: () => 0,
+    }
+  })
+    .then((exports) => {
+      exports._compilePattern();
+    })
+    .catch(err => {
+      throw err;
+    });
+</script>
